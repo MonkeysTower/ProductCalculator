@@ -1,0 +1,493 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+h1, h2, h3, p {
+  color: #000000;
+  margin: 20px 10px;
+}
+
+.header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  background-color: #BC0022;
+  color: white;
+}
+
+.header button {
+  font-size: medium;
+  padding: 0px 5px;
+  margin-right: 20px;
+  background-color: #BC0022;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.header button:hover {
+  background-color: #d60229;
+}
+
+.header h1, .header h2 {
+  color: #ffffff;
+  margin: 10px;
+}
+
+.header a {
+  color: white;
+  text-decoration: none;
+  margin: 0 20px;
+}
+
+.header a:hover {
+  text-decoration: underline;
+}
+
+main {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.main-page {
+  box-sizing: border-box;
+  width: 60%; /* Станет гибче на меньших экранах */
+}
+
+.calculation-page {
+  box-sizing: border-box;
+  width: 60%;
+}
+
+.sector-window.hidden {
+  display: none;
+}
+
+.sector-window {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 20px 5px 20px 20px;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .1);
+}
+
+.image-container.selected {
+  padding: 1px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 1);
+  transition: 1s;
+}
+
+.sector-window .btn-calculate, .sector-window .btn-add, .sector-window .btn-send {
+  font-size: medium;
+  padding: 10px 25px;
+  margin: 5px 10px;
+  background-color: #BC0022;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sector-window.choise div div {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.sector-window .btn-calculate:hover, .sector-window .btn-add:hover, .sector-window .btn-send:hover {
+  background-color: #d60229;
+}
+
+.sector-window .btn-calculate:active, .sector-window .btn-add:active, .sector-window .btn-send:active {
+  background-color: #85021a;
+}
+
+.greeting-text {
+  font-size: large;
+  font-weight: bold;
+}
+
+.side-bars {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 0px;
+  width: 30%;
+}
+.storage-bar {
+  margin: 20px 0px 0px -10px;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .1);
+}
+
+.place-for-items {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 600px;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.storage-item {
+  display: block;
+  width: 100%;
+  padding-left: 10px;
+  margin-bottom: 5px;
+  font-size: 16px;
+  background-color: #BC0022;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+main .storage-bar .place-for-items .storage-item p {
+  color: #ffffff;
+  text-align: start;
+  padding: 0px;
+  margin: 0px 0px 5px 0px;
+}
+
+main .advertisment {
+  margin: 20px 10px 20px -10px;
+  width: min(100%, 300px);
+  height: 600px;
+}
+
+main .advertisment-picture {
+  align-self: center;
+  height: 100%;
+  width: 100%;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  border: 0px;
+  margin: 10px;
+  padding: 1px;
+  background-color: rgba(0, 0, 0, .0);
+}
+
+.image-container:hover {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  margin: 10px;
+  padding: 1px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.image-container:active {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  margin: 10px;
+  padding: 1px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.image {
+  display: block;
+  max-width: 140px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.caption {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  color: #000000;
+  font-size: 14px;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.form label {
+  display: block;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+
+.form input {
+  width: 50%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+footer {
+  height: 60px;
+  background-color: #333333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .contact-info p {
+  color: #ffffff;
+  margin: 10px 20px;
+  font-size: small;
+}
+
+footer .my-info p {
+  margin: 10px 20px;
+  font-size: large;
+  font-weight: lighter;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+footer .my-info a {
+  font-size: large;
+  font-weight: 200;
+  color: #ffffff;
+}
+
+.login-modal {
+  position: absolute;
+  top: 60px;
+  z-index: 999;
+  height: calc(100vh - 120px);
+  width: 100vw;
+  background-color: rgba(0, 0, 0, .7);
+}
+
+.modal-content{
+  max-width: 30%;
+  margin: 20px;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .1);
+  margin-top: 100px;
+  margin-left: 50%;
+  transform: translate(-50%, -0%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-content form{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-content h2{
+  color: #BC0022;
+}
+
+.modal-content form label{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: medium;
+}
+
+.modal-content form label input{
+  width: 80%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal-content form label .remember-btn {
+  font-size: small;
+  padding:0px;
+  margin: 5px 0px;
+  background-color: #FFFFFF;
+  color: #BC0022;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: underline;
+}
+
+.modal-content form div{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-content form div .main-btn{
+  font-size: larger;
+  width: 100%;
+  padding:5px 25px;
+  margin:10px 0px;
+  background-color: #BC0022;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal-content form div .additional-btn{
+  font-size: large;
+  padding:5px 25px;
+  margin:0px 0px;
+  background-color: #FFFFFF;
+  color: #BC0022;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: underline;
+}
+
+.reg-modal {
+  position: absolute;
+  top: 60px;
+  z-index: 999;
+  height: calc(100vh - 120px);
+  width: 100vw;
+  background-color: rgba(0, 0, 0, .7);
+}
+
+/* --- Медиа-запросы для адаптивности --- */
+
+@media (max-width: 480px) {
+  .header {
+      flex-direction: column; /* Хедер становится вертикальным */
+      align-items: center;
+      padding: 10px;
+      height: 130px;
+  }
+
+  .header a {
+    margin: 20px 5px;
+    padding: 0px 0px;
+  }
+  .header button {
+    margin-top: 20px;
+    margin: 0px;
+    padding: 10px 0px;
+  }
+  .main-page {
+    width: 100vw;
+    margin: 0;
+  }
+  .calculation-page{
+    width: 100vw;
+    margin: 0;
+  }
+  .sector-window{
+    box-sizing: border-box;
+    width: calc(100vw - 20px);
+    margin: 0px 10px 0px 10px;
+  }
+  .side-bars {
+    width: 100%; /* Элементы занимают всю ширину */
+    margin: 0;
+  }
+
+  .sector-window, .storage-bar, .advertisment {
+    margin: 10px 0; /* Сужение отступов */
+  }
+
+  .main .storage-bar .place-for-items {
+      height: 300px; /* Сокращение высоты */
+  }
+
+  .login-modal {
+    top: 150px;
+    height: calc(100vh - 130px);
+  }
+
+  .reg-modal {
+    top: 150px;
+    height: calc(100vh - 60px);
+  }
+  .modal-content {
+    width: calc(100vw - 50px);
+    max-width: calc(100vw - 20px);
+  }
+  .modal-content form label{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: medium;
+  }
+  footer {
+      flex-direction: column; /* Футер становится вертикальным */
+      height: auto;
+      padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header a {
+    margin: 10px 10px;
+  }
+
+  .login-modal {
+    height: calc(100vh - 60px);
+  }
+
+  .reg-modal {
+    height: calc(100vh - 60px);
+  }
+  .modal-content form label{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: medium;
+  }
+
+  main {
+      flex-direction: column; /* Вертикальная компоновка */
+      align-items: stretch; /* Растянуть элементы */
+  }
+
+  .main-page, .calculation-page, .side-bars {
+    width: 100%;
+    margin: 0;
+  }
+
+  .sector-window, .storage-bar, .advertisment {
+    box-sizing: border-box;
+    width: calc(100vw - 20px);
+    margin: 10px 0; /* Сужение отступов */
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-page, .calculation-page {
+      width: 50%; /* Уменьшение ширины */
+  }
+  .modal-content {
+    width: calc(70vw - 50px);
+    max-width: calc(100vw - 20px);
+  }
+  .modal-content form label{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: medium;
+  }
+  main .side-bars {
+      width: 40%; /* Увеличение сайдбара */
+  }
+}
