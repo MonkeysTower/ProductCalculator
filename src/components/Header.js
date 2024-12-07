@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const Header = ({ toggleLoginModal,OutSistem, isLoggedIn }) => {
 
@@ -8,9 +9,9 @@ const Header = ({ toggleLoginModal,OutSistem, isLoggedIn }) => {
         <h1>Finist</h1>
       </div>
       <nav className="nav-links">
-        <a href="https://f-inox.ru/" target="_blank">Главная</a>
-        <a href="https://f-inox.ru/o-kompanii/" target="_blank">О нас</a>
-        <a href="https://f-inox.ru/contacts/" target="_blank">Контакты</a>
+        <Link to="/">Главная</Link>
+        <Link to="/about-us">О нас</Link>
+        <Link to="/contacts">Контакты</Link>
       </nav>
       <div className="auth-buttons">
         {!isLoggedIn && <button onClick={toggleLoginModal}>Войти</button>}

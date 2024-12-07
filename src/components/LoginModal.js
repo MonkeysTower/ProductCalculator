@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginModal = ({ onClose, onLogin, onRegister }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin(); // Потом доработать механизм проверки
+    navigate("/calculation");
   };
 
   return (

@@ -59,7 +59,7 @@ main {
 
 .main-page {
   box-sizing: border-box;
-  width: 60%; /* Станет гибче на меньших экранах */
+  width: 60%;
 }
 
 .calculation-page {
@@ -264,6 +264,18 @@ footer .my-info a {
   font-weight: 200;
   color: #ffffff;
 }
+footer button {
+  background-color: #333333;
+  border: none;
+  color: white;
+  text-decoration: none;
+  margin: 0 20px;
+  font-size: 20px;
+}
+
+footer button:hover {
+  text-decoration: underline;
+}
 
 .login-modal {
   position: absolute;
@@ -313,6 +325,16 @@ footer .my-info a {
   margin-top: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 14px;
+}
+
+.modal-content form label textarea{
+  width: 80%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
 .modal-content form label .remember-btn {
@@ -357,7 +379,7 @@ footer .my-info a {
   text-decoration: underline;
 }
 
-.reg-modal {
+.reg-modal, .support-modal {
   position: absolute;
   top: 60px;
   z-index: 999;
@@ -366,11 +388,10 @@ footer .my-info a {
   background-color: rgba(0, 0, 0, .7);
 }
 
-/* --- Медиа-запросы для адаптивности --- */
 
 @media (max-width: 480px) {
   .header {
-      flex-direction: column; /* Хедер становится вертикальным */
+      flex-direction: column;
       align-items: center;
       padding: 10px;
       height: 130px;
@@ -399,16 +420,16 @@ footer .my-info a {
     margin: 0px 10px 0px 10px;
   }
   .side-bars {
-    width: 100%; /* Элементы занимают всю ширину */
+    width: 100%;
     margin: 0;
   }
 
   .sector-window, .storage-bar, .advertisment {
-    margin: 10px 0; /* Сужение отступов */
+    margin: 10px 0;
   }
 
   .main .storage-bar .place-for-items {
-      height: 300px; /* Сокращение высоты */
+      height: 300px;
   }
 
   .login-modal {
@@ -416,7 +437,7 @@ footer .my-info a {
     height: calc(100vh - 130px);
   }
 
-  .reg-modal {
+  .reg-modal, .support-modal {
     top: 150px;
     height: calc(100vh - 60px);
   }
@@ -431,7 +452,7 @@ footer .my-info a {
     font-size: medium;
   }
   footer {
-      flex-direction: column; /* Футер становится вертикальным */
+      flex-direction: column;
       height: auto;
       padding: 10px;
   }
@@ -446,7 +467,7 @@ footer .my-info a {
     height: calc(100vh - 60px);
   }
 
-  .reg-modal {
+  .reg-modal, .support-modal {
     height: calc(100vh - 60px);
   }
   .modal-content form label{
@@ -457,8 +478,8 @@ footer .my-info a {
   }
 
   main {
-      flex-direction: column; /* Вертикальная компоновка */
-      align-items: stretch; /* Растянуть элементы */
+      flex-direction: column;
+      align-items: stretch;
   }
 
   .main-page, .calculation-page, .side-bars {
