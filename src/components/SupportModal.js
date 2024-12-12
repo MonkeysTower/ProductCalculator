@@ -11,8 +11,10 @@ const SupportModal = ({ onClose, onSubmit }) => {
             alert("Пожалуйста, заполните все поля!");
             return;
         }
-        onSubmit({ username, contactInfo, subject, message }); // Передаём данные в родительский компонент
-        onClose(); // Закрываем модальное окно
+        else {
+          onSubmit({ username, contactInfo, subject, message }); // Передаём данные в родительский компонент
+          onClose(); // Закрываем модальное окно
+        }
     };
 
     return (
@@ -27,6 +29,7 @@ const SupportModal = ({ onClose, onSubmit }) => {
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
                           placeholder="Введите ваше имя"
+                          required
                     /></label>
                     <label className="form-label">Контактная информация:<br/>
                       <input
@@ -35,6 +38,7 @@ const SupportModal = ({ onClose, onSubmit }) => {
                           value={contactInfo}
                           onChange={(e) => setContactInfo(e.target.value)}
                           placeholder="Email или телефон"
+                          required
                     /></label>
                     <label className="form-label">Тема обращения:<br/>
                       <input
@@ -43,6 +47,7 @@ const SupportModal = ({ onClose, onSubmit }) => {
                           value={subject}
                           onChange={(e) => setSubject(e.target.value)}
                           placeholder="Кратко опишите тему"
+                          required
                     /></label>
                     <label className="form-label">Сообщение:<br/>
                       <textarea
@@ -50,6 +55,7 @@ const SupportModal = ({ onClose, onSubmit }) => {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="Опишите вашу проблему"
+                        required
                     /></label>
                     <div className="modal-actions">
                       <button className="main-btn" onClick={handleSubmit}>
