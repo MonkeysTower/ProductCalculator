@@ -28,3 +28,4 @@ modules/*
 media/*
 !placeholder.png
 __pycache__
+/venv
