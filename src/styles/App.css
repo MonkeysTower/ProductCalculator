@@ -179,31 +179,36 @@ main .advertisment-picture {
 }
 
 .image-container {
-  position: relative;
-  display: inline-block;
-  width: fit-content;
-  border: 0px;
-  margin: 10px;
-  padding: 1px;
-  background-color: rgba(0, 0, 0, .0);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    width: 20%;
+    margin: 10px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image {
+    display: block;
+    min-width: 98%;
+    min-height: 98%;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .image-container:hover {
-  position: relative;
-  display: inline-block;
-  width: fit-content;
-  margin: 10px;
-  padding: 1px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, .2);
 }
 
 .image-container:active {
-  position: relative;
-  display: inline-block;
-  width: fit-content;
-  margin: 10px;
-  padding: 1px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 1);
 }
@@ -407,6 +412,9 @@ footer button:hover {
       padding: 0px 10px;
       height: 60px;
   }
+  .image-container {
+        width: 45%;
+  }
   main {
     overflow-x: hidden;
     width: 100vw;
@@ -550,5 +558,8 @@ footer button:hover {
     box-sizing: border-box;
     width: calc(100vw - 20px);
     margin: 10px 0; /* Сужение отступов */
+  }
+  .image-container {
+        width: 30%;
   }
 }
