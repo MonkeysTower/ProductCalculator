@@ -1,33 +1,12 @@
-'''from rest_framework import serializers
-from .models import *
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-class ProductTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductType
-        fields = '__all__'
-
-class SeriesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Series
-        fields = '__all__'
-
-class StorageItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StorageItem
-        fields = '__all__'
-
-class UserRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserRequest
-        fields = '__all__'
-'''
 from rest_framework import serializers
-from .models import Category, Type, Series, ProductField, Stock
+from .models import (
+    Category,
+    Type,
+    Series,
+    ProductField,
+    Stock,
+    Article
+)
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,8 +38,18 @@ class ProductFieldSerializer(serializers.ModelSerializer):
             "custom_false",
         ]
 
-
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ["id", "series", "price", "quantity"]
+        fields = ["id", "name", "price", "quantity"]
+
+class ArticleSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'image', 'created_at']
+
+    def get_image(self, obj):
+        # Используем метод модели для получения изображения
+        return obj.get_image()

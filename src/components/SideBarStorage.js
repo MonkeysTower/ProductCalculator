@@ -8,22 +8,18 @@ const SideBarStorage = () => {
         fetch(`${API_BASE_URL}/stock/`)
             .then(response => response.json())
             .then(data => setStock(data));
-    }, []);
+    }, [API_BASE_URL]);
 
     return (
         <div className="sector-window storage-bar">
             <h2>Остатки на складе:</h2>
             <div className="place-for-items">
                 {stock.map(item => (
-                    <button
-                        key={item.id}
-                        className="storage-item"
-                        onClick={() => alert("Добавлено в заявку")}
-                    >
-                        <p>{item.series}</p>
+                    <div className="storage-item" key={item.id}>
+                        <p>{item.name}</p>
                         <p><b>Стоимость:</b> {item.price}</p>
-                        <p><b>Количество:</b> {item.quantity}шт.</p>
-                    </button>
+                        <p><b>Количество:</b> {item.quantity} шт.</p>
+                    </div>
                 ))}
             </div>
         </div>

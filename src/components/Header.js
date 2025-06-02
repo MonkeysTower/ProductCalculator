@@ -16,6 +16,7 @@ const Header = ({ toggleLoginModal, OutSistem, isLoggedIn }) => {
 
       <nav className="nav-links desktop-only">
         <Link to="/">Главная</Link>
+        {isLoggedIn && <Link to="/calculation">Калькулятор</Link>}
         <Link to="/about-us">О нас</Link>
         <Link to="/contacts">Контакты</Link>
       </nav>
@@ -31,6 +32,7 @@ const Header = ({ toggleLoginModal, OutSistem, isLoggedIn }) => {
 
       <nav className={`mobile-only nav-links-mobile ${isMenuOpen ? "open" : ""}`}>
         <Link to="/" onClick={toggleMenu}>Главная</Link>
+        {isLoggedIn && <Link to="/calculation" onClick={toggleMenu}>Калькулятор</Link>}
         <Link to="/about-us" onClick={toggleMenu}>О нас</Link>
         <Link to="/contacts" onClick={toggleMenu}>Контакты</Link>
         <div className="auth-buttons-mobile">
