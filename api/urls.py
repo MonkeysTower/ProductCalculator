@@ -1,8 +1,8 @@
 from django.urls import path
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView, 
-    TokenRefreshView, 
-    TokenVerifyView
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
 )
 from .views import (
     CategoryListView,
@@ -12,7 +12,6 @@ from .views import (
     StockListView,
     CalculateCostView,
     LatestArticleView,
-    user_login,
     register_user,
     get_csrf_token,
     user_logout,
@@ -25,12 +24,11 @@ urlpatterns = [
     path("product-fields/", ProductFieldListView.as_view(), name="product-field-list"),
     path("stock/", StockListView.as_view(), name="stock-list"),
     path("calculate-cost/", CalculateCostView.as_view(), name="calculate-cost"),
-    #path('login/', user_login, name='user_login'),
-    path('register/', register_user, name='register_user'),
-    path('get-csrf-token/', get_csrf_token, name='get_csrf_token'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('logout/', user_logout, name='user_logout'),
-    path('latest-article/', LatestArticleView.as_view(), name='latest_article'),
+    path("register/", register_user, name="register_user"),
+    path("get-csrf-token/", get_csrf_token, name="get_csrf_token"),
+    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path("logout/", user_logout, name="user_logout"),
+    path("latest-article/", LatestArticleView.as_view(), name="latest_article"),
 ]

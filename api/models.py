@@ -1,8 +1,9 @@
 from django.db import models
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    image = models.ImageField(upload_to="categories/", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -11,7 +12,7 @@ class Category(models.Model):
 class Type(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='types/', blank=True, null=True)
+    image = models.ImageField(upload_to="types/", blank=True, null=True)
 
     def __str__(self):
         return f"{self.category.name} - {self.name}"
@@ -20,7 +21,7 @@ class Type(models.Model):
 class Series(models.Model):
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='series/', blank=True, null=True)
+    image = models.ImageField(upload_to="series/", blank=True, null=True)
 
     def __str__(self):
         return f"{self.type.name} - {self.name}"
@@ -39,8 +40,12 @@ class ProductField(models.Model):
         ],
     )
     options = models.JSONField(blank=True, null=True)  # Для выпадающих списков
-    custom_true = models.CharField(max_length=50, blank=True, null=True)  # Кастомное значение True
-    custom_false = models.CharField(max_length=50, blank=True, null=True)  # Кастомное значение False
+    custom_true = models.CharField(
+        max_length=50, blank=True, null=True
+    )  # Кастомное значение True
+    custom_false = models.CharField(
+        max_length=50, blank=True, null=True
+    )  # Кастомное значение False
 
     def __str__(self):
         return f"{self.series.name} - {self.field_name}"
@@ -61,12 +66,20 @@ class Module(models.Model):
 
     def __str__(self):
         return f"Module for {self.series.name}"
-    
+
+
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name="Заголовок")
     content = models.TextField(verbose_name="Содержание")
-    image_url = models.URLField(blank=True, null=True, verbose_name="Ссылка на изображение (из интернета)")
-    image_file = models.ImageField(upload_to='articles/', blank=True, null=True, verbose_name="Изображение (локальное)")
+    image_url = models.URLField(
+        blank=True, null=True, verbose_name="Ссылка на изображение (из интернета)"
+    )
+    image_file = models.ImageField(
+        upload_to="articles/",
+        blank=True,
+        null=True,
+        verbose_name="Изображение (локальное)",
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
@@ -78,6 +91,6 @@ class Article(models.Model):
         elif self.image_url:
             return self.image_url
         return None
-    
+
     def __str__(self):
         return self.title

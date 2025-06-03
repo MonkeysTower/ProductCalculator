@@ -5,13 +5,20 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Category, Type, Series, Module
 
+
 class APITests(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.category = Category.objects.create(name="Test Category", image="")
-        self.type = Type.objects.create(name="Test Type", category=self.category, image="")
-        self.series = Series.objects.create(name="Test Series", type=self.type, image="")
+        self.category = Category.objects.create(
+            name="Test Category", image=""
+        )
+        self.type = Type.objects.create(
+            name="Test Type", category=self.category, image=""
+        )
+        self.series = Series.objects.create(
+            name="Test Series", type=self.type, image=""
+        )
         self.module = Module.objects.create(
             series=self.series,
             module_path="modules.calculate_zvn_01"
@@ -24,7 +31,9 @@ class APITests(TestCase):
             custom_false="No"
         )
         self.client = APIClient()
-        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
         refresh = RefreshToken.for_user(self.user)
         self.token = str(refresh.access_token)
 

@@ -4,7 +4,6 @@ import json
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.cache import cache
@@ -15,13 +14,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import (
-    Category, 
-    Type, 
-    Series, 
-    ProductField, 
-    Stock, 
+    Category,
+    Type,
+    Series,
+    ProductField,
+    Stock,
     Module,
-    Article
+    Article,
 )
 from .serializers import (
     CategorySerializer,
@@ -29,19 +28,20 @@ from .serializers import (
     SeriesSerializer,
     ProductFieldSerializer,
     StockSerializer,
-    ArticleSerializer
-    )
+    ArticleSerializer,
+)
 
 logger = logging.getLogger(__name__)
 
+
 class CategoryListView(APIView):
     def get(self, request):
-        cached_categories = cache.get('categories')
+        cached_categories = cache.get("categories")
         if not cached_categories:
             try:
                 categories = Category.objects.all()
                 serializer = CategorySerializer(categories, many=True)
-                cache.set('categories', serializer.data, timeout=1200)
+                cache.set("categories", serializer.data, timeout=1200)
                 logger.info("Categories fetched successfully.")
                 return Response(serializer.data)
             except Exception as e:
@@ -53,7 +53,7 @@ class CategoryListView(APIView):
 class TypeListView(APIView):
     def get(self, request):
         category_id = request.GET.get("category_id")
-        cache_key = f'types_{category_id}'
+        cache_key = f"types_{category_id}"
         cached_types = cache.get(cache_key)
         if not cached_types:
             types = Type.objects.filter(category_id=category_id)
@@ -66,7 +66,7 @@ class TypeListView(APIView):
 class SeriesListView(APIView):
     def get(self, request):
         type_id = request.GET.get("type_id")
-        cache_key = f'series_{type_id}'
+        cache_key = f"series_{type_id}"
         cached_series = cache.get(cache_key)
         if not cached_series:
             series = Series.objects.filter(type_id=type_id)
@@ -92,7 +92,7 @@ class StockListView(APIView):
 
 
 class CalculateCostView(APIView):
-    authentication_classes = [JWTAuthentication]  # Используем JWT для аутентификации
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -100,8 +100,7 @@ class CalculateCostView(APIView):
         data = request.data.get("data")
         if not series_id or not data:
             return Response(
-                {"error": "Both 'series_id' and 'data' are required."},
-                status=400
+                {"error": "Both 'series_id' and 'data' are required."}, status=400
             )
         try:
             module = Module.objects.get(series_id=series_id)
@@ -112,21 +111,31 @@ class CalculateCostView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
 
+
 def user_login(request):
     if request.method == "POST":
         try:
-            body = json.loads(request.body)  # Парсим JSON из тела запроса
+            body = json.loads(request.body)
             username = body.get("username")
             password = body.get("password")
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return JsonResponse({"success": True, "message": "Вход выполнен успешно."})
+                return JsonResponse(
+                    {"success": True, "message": "Вход выполнен успешно."}
+                )
             else:
-                return JsonResponse({"success": False, "message": "Неверный логин или пароль."})
+                return JsonResponse(
+                    {"success": False, "message": "Неверный логин или пароль."}
+                )
         except json.JSONDecodeError:
-            return JsonResponse({"success": False, "message": "Неверный формат данных."}, status=400)
-    return JsonResponse({"success": False, "message": "Метод не поддерживается."}, status=405)
+            return JsonResponse(
+                {"success": False, "message": "Неверный формат данных."}, status=400
+            )
+    return JsonResponse(
+        {"success": False, "message": "Метод не поддерживается."}, status=405
+    )
+
 
 def register_user(request):
     if request.method == "POST":
@@ -142,7 +151,10 @@ def register_user(request):
             # Проверяем, что все обязательные поля переданы
             if not all([company_name, inn, region, phone, email]):
                 return JsonResponse(
-                    {"success": False, "message": "Необходимо заполнить все обязательные поля."},
+                    {
+                        "success": False,
+                        "message": "Необходимо заполнить все обязательные поля.",
+                    },
                     status=400,
                 )
 
@@ -155,7 +167,7 @@ def register_user(request):
                 f"Телефон: {phone}\n"
                 f"Email: {email}"
             )
-            
+
             # Отправляем письмо администратору
             try:
                 send_mail(
@@ -171,7 +183,9 @@ def register_user(request):
                     status=500,
                 )
 
-            return JsonResponse({"success": True, "message": "Регистрация прошла успешно."})
+            return JsonResponse(
+                {"success": True, "message": "Регистрация прошла успешно."}
+            )
 
         except json.JSONDecodeError:
             return JsonResponse(
@@ -180,17 +194,20 @@ def register_user(request):
             )
         except Exception as e:
             return JsonResponse(
-                {"success": False, "message": f"Ошибка сервера: {str(e)}"},
-                status=500,
+                {"success": False, "message": f"Ошибка сервера: {str(e)}"}, status=500
             )
 
-    return JsonResponse({"success": False, "message": "Метод не поддерживается."}, status=405)
+    return JsonResponse(
+        {"success": False, "message": "Метод не поддерживается."}, status=405
+    )
+
 
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({"csrfToken": token})
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
     try:
@@ -200,16 +217,23 @@ def user_logout(request):
         return JsonResponse({"success": True, "message": "Выход выполнен успешно."})
     except Exception as e:
         return JsonResponse({"success": False, "message": str(e)}, status=400)
-    
+
+
 class LatestArticleView(APIView):
     def get(self, request):
-        cached_article = cache.get('latest_article')
+        cached_article = cache.get("latest_article")
         if not cached_article:
-            article = Article.objects.filter(is_published=True).order_by('-created_at').first()
+            article = (
+                Article.objects.filter(is_published=True)
+                .order_by("-created_at")
+                .first()
+            )
             if article:
                 serializer = ArticleSerializer(article)
                 cached_article = serializer.data
-                cache.set('latest_article', cached_article, timeout=3600)  # Кэширование на 1 час
+                cache.set(
+                    "latest_article", cached_article, timeout=3600
+                )  # Кэширование на 1 час
             else:
                 return Response({"detail": "Статья не найдена"}, status=404)
         return Response(cached_article)
