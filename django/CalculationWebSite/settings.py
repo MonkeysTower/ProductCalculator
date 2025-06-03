@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 from starlette.config import Config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 config = Config('.env')
 
@@ -65,7 +64,7 @@ ROOT_URLCONF = 'CalculationWebSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        "DIRS": [os.path.join(BASE_DIR, 'build')],
+        "DIRS": [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,8 +155,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build/static')]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -180,4 +177,3 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', cast=str)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', cast=str)
 SERVER_EMAIL = config('SERVER_EMAIL', cast=str)
 EMAIL_ADMIN = config('EMAIL_ADMIN', cast=str)
-REACT_APP_ADMIN_EMAIL = config("REACT_APP_ADMIN_EMAIL")

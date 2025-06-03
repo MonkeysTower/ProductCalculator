@@ -174,7 +174,7 @@ def register_user(request):
                     "Запрос на регистрацию",
                     message,
                     settings.DEFAULT_FROM_EMAIL,
-                    [settings.REACT_APP_ADMIN_EMAIL],
+                    [settings.EMAIL_ADMIN],
                     fail_silently=False,
                 )
             except Exception as e:
