@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+# ProductCalculator (Calculation Web Application)
+## Project Description
+This is a web application developed using Django (backend) and React (frontend) technologies. The project is designed to perform product cost calculations for registered users. All the products have a hierarchical structure (Category>Product Type>Product Series). In this case, the main distinguishing feature is the absence of the ability to register users without the knowledge of the administrator. The application is packaged in Docker containers for easy deployment and scalability.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
+## Application features
+ - Fresh news publication: the app shows the latest published news stored in the application's database, while the photo for this post can be either stored locally or taken from another internet resource (http).
+ - Product cost calculation: registered users can authorise on the site to get the product cost calculation depending on the product parameters, and the calculation is started by the developer with the help of separate py-modules. 
+ - Access: Users who are not authorised will not be able to get the calculation, which allows to keep confidentiality.
+ - Registration: registration does not take place without the knowledge of the administrator. When registering, the data specified by the user is sent to the administrator, who in turn adds it to the database, thus eliminating the possibility of access to the calculation by undesirable persons.
+ - Support: The user can also contact the technical support of the site and his request will be sent to the corresponding e-mail specified in .env.
+---
+## Technologies
+ - Backend : Django (Python 3.11)
+ - Frontend : React (Node.js 18)
+ - Database : PostgreSQL
+ - Authentication : JWT (JSON Web Tokens) using rest_framework_simplejwt
+ - Containerization : Docker + Docker Compose
+ - Reverse Proxy : Nginx
+ - Additional Features : CORS, REST API
 
-## Available Scripts
+---
+## Project Structure
+```
+ProjectSite/
+├── django/                 # Backend (Django)
+│   ├── manage.py           # Django management script
+│   ├── requirements.txt    # Python dependencies
+│   ├── Dockerfile          # Dockerfile for the backend
+│   └── ...
+├── react/                  # Frontend (React)
+│   ├── src/                # React source code
+│   ├── package.json        # Node.js dependencies
+│   ├── Dockerfile          # Dockerfile for the frontend
+│   └── ...
+├── nginx/                  # Nginx configuration
+│   ├── nginx.conf          # Main configuration file
+│   └── Dockerfile          # Dockerfile for Nginx
+│ 
+├── .env.sample             # Example of required environment variables for an .env file
+├── docker-compose.yml      # Main Docker Compose file
+└── README.md               # Project documentation
+```
 
-In the project directory, you can run:
+---
+## Installation and Setup
 
-### `npm start`
+### Prerequisites
+#### 1. Installed Tools:
+ - Docker ([installation guide](https://docs.docker.com/get-started/get-docker/))
+ - Docker Compose (included in Docker Desktop)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### 2. Dependencies:
+ - Ensure that ports 80, 8000, DB_PORT (in .env), and 3000 are free on your machine.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
+### Steps to Run
+#### 1. Clone the Repository:
+```bash
+git clone https://github.com/MonkeysTower/ProductCalculator.git 
+cd ProductCalculator
+```
 
-### `npm test`
+#### 2.Create `.env` file:
+ - Create an .env file in the main directory following the example of the .env.sample file
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 3.Start the Containers:
+```bash
+docker-compose up --build
+```
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### After successful startup, the application will be available at: `http://localhost:3000`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
+## Working with the Project
+### API
+ - API is accessible at:
+```https
+http://localhost:8000/api/
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ - Django admin panel
+```https
+http://localhost:8000/admin/
+```
 
-### `npm run eject`
+ - For create a superuser to access the admin panel:
+```
+docker exec -it <backend_container_id> python manage.py createsuperuser
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+ - For create a initial working sample data use:
+```
+docker exec -it <backend_container_id> python manage.py create_sample_data
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ - If you make changes to Django models, apply migrations: reduild Containers
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+## Contact
+If you have any questions or suggestions, feel free to contact me:
+ - Email: Trifandre@yandex.ru
+ - GitHub: <https://github.com/MonkeysTower/>
