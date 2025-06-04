@@ -94,7 +94,7 @@ http://localhost:8000/admin/
 ```
 OR
 ```https
-http://{YOUR_INTERNAL_IP}/admin/
+http://{YOUR_INTERNAL_IP}:8000/admin/
 ```
 
  - For create a superuser to access the admin panel:
