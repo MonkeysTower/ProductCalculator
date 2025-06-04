@@ -1,31 +1,53 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# React-specific
+react/node_modules
+react/build
+
+# Node.js/Yarn
 /.pnp
 .pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# testing
+# Test coverage
 /coverage
 
-# production
-/build
-/staticfiles
-
-# misc
+# Misc
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 .env
+.log
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-modules/*
-media/*
-!placeholder.png
+# Python/Django
 __pycache__
-/venv
+django/venv
+django/staticfiles
+django/debug.log
+
+# Django modules
+django/modules/*
+!django/modules/__init__.py
+
+# Django media
+django/media/articles/*
+!django/media/articles/
+django/media/categories/*
+!django/media/categories/
+django/media/types/*
+!django/media/types/
+django/media/series/*
+!django/media/series/
+!django/media/placeholder.png
+
+# Optional: Ignore compiled Python and SQLite files
+*.pyc
+*.sqlite3
+
+# Optional: IDE-specific files
+.vscode/
+.idea/
