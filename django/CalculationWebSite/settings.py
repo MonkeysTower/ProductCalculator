@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'CalculationWebSite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
+        'NAME': config('DB_NAME', cast=str),
         'USER': config('DB_USER', cast=str),
         'PASSWORD': config('DB_PASSWORD', cast=str),
-        'HOST': config('DB_HOST', cast=str),
+        'HOST': config('DB_HOST', default='db', cast=str),
         'PORT': config('DB_PORT', cast=str),
     }
 }
@@ -161,10 +161,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # URL вашего фронтенда
+    "http://localhost:3000",
+    "http://localhost:8000",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",  # React
+    "http://localhost:3000",
+    "http://localhost:8000",
 ]
 CORS_ALLOW_CREDENTIALS = True
 

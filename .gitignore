@@ -31,7 +31,7 @@ django/debug.log
 
 # Django modules
 django/modules/*
-!django/modules/
+!django/modules/__init__.py
 
 # Django media
 django/media/articles/*
