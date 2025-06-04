@@ -19,15 +19,3 @@ COPY .env .env
 
 # Копирование исходного кода приложения
 COPY django/ .
-
-# Сборка статических файлов
-#RUN python manage.py collectstatic --noinput
-
-# Выполняем entrypoint
-#ENTRYPOINT ["/app/entrypoint.sh"]
-
-# Открытие порта для Django-сервера
-#EXPOSE 8000
-
-# Команда для запуска сервера
-#CMD ["gunicorn", "CalculationWebSite.wsgi:application", "--bind", "0.0.0.0:8000"]

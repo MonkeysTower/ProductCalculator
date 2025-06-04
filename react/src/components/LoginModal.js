@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../utils/cookieUtils";
 
-const LoginModal = ({ onClose, onLogin, onRegister }) => {
+const LoginModal = ({ onClose, onLogin, onRegister, onSupport }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+    const toSupport = async (e) => {
+        onSupport()
+        onClose()
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -57,7 +62,7 @@ const LoginModal = ({ onClose, onLogin, onRegister }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <button className='remember-btn' type="button">Забыли пароль?</button>
+                        <button className='remember-btn' type="button"onClick={toSupport}>Забыли пароль?</button>
                     </label>
                     <button className="main-btn" type="submit">Войти</button>
                     <button className="additional-btn" type="button" onClick={onRegister}>

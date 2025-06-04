@@ -13,6 +13,7 @@ from .views import (
     CalculateCostView,
     LatestArticleView,
     register_user,
+    support_user,
     get_csrf_token,
     user_logout,
 )
@@ -25,6 +26,7 @@ urlpatterns = [
     path("stock/", StockListView.as_view(), name="stock-list"),
     path("calculate-cost/", CalculateCostView.as_view(), name="calculate-cost"),
     path("register/", register_user, name="register_user"),
+    path("support/", support_user, name="support_user"),
     path("get-csrf-token/", get_csrf_token, name="get_csrf_token"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

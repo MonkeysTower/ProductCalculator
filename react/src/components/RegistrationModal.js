@@ -10,6 +10,10 @@ const RegistrationModal = ({ onClose }) => {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     const handleSubmit = async (e) => {
+        if (!companyName || !inn || !region || !phone || !email) {
+            alert("Пожалуйста, заполните все поля!");
+            return;
+        }
         e.preventDefault();
         try {
             const response = await fetch(`${API_BASE_URL}/register/`, {

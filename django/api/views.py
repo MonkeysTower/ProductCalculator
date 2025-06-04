@@ -148,16 +148,6 @@ def register_user(request):
             phone = body.get("phone")
             email = body.get("email")
 
-            # Проверяем, что все обязательные поля переданы
-            if not all([company_name, inn, region, phone, email]):
-                return JsonResponse(
-                    {
-                        "success": False,
-                        "message": "Необходимо заполнить все обязательные поля.",
-                    },
-                    status=400,
-                )
-
             # Формируем сообщение для администратора
             message = (
                 f"Данные указанные при регистрации:\n\n"
@@ -185,6 +175,59 @@ def register_user(request):
 
             return JsonResponse(
                 {"success": True, "message": "Регистрация прошла успешно."}
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"success": False, "message": "Неверный формат данных. Ожидался JSON."},
+                status=400,
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"success": False, "message": f"Ошибка сервера: {str(e)}"}, status=500
+            )
+
+    return JsonResponse(
+        {"success": False, "message": "Метод не поддерживается."}, status=405
+    )
+
+
+def support_user(request):
+    if request.method == "POST":
+        try:
+            # Получаем данные из тела запроса в формате JSON
+            body = json.loads(request.body)
+            username = body.get("username")
+            contact_info= body.get("contact_info")
+            subject = body.get("subject")
+            user_message = body.get("message")
+
+            # Формируем сообщение для администратора
+            message = (
+                f"Запрос в тех.поддержку:\n\n"
+                f"Имя: {username}\n"
+                f"Контактная информация: {contact_info}\n\n"
+                f"Тема сообщения: {subject}\n"
+                f"Содержание сообщения: {user_message}\n"
+            )
+
+            # Отправляем письмо администратору
+            try:
+                send_mail(
+                    "СЛУЧИЛАСЬ БЕДА!",
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.SUPPORT_EMAIL],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                return JsonResponse(
+                    {"success": False, "message": f"Ошибка отправки письма: {str(e)}"},
+                    status=500,
+                )
+
+            return JsonResponse(
+                {"success": True, "message": "Запрос успешно отправлен."}
             )
 
         except json.JSONDecodeError:

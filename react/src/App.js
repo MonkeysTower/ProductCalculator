@@ -28,10 +28,6 @@ const App = () => {
         setIsLoggedIn(true);
         setShowLoginModal(false);
     };
-    const handleSubmit = (formData) => {
-        console.log("Отправленные данные:", formData);
-        alert("Ваша заявка успешно отправлена!");
-    };
 
     const unautorization = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -140,13 +136,13 @@ const App = () => {
                         onClose={toggleLoginModal}
                         onLogin={handleLogin}
                         onRegister={toggleRegistrationModal}
+                        onSupport={toggleSupportModal}
                     />
                 )}
                 {showRegistrationModal && <RegistrationModal onClose={toggleRegistrationModal} />}
                 {showSupportModal && (
                     <SupportModal
                         onClose={toggleSupportModal}
-                        onSubmit={handleSubmit}
                     />
                 )}
             </div>
