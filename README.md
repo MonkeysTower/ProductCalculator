@@ -11,7 +11,7 @@ This is a web application developed using Django (backend) and React (frontend) 
  - Support: The user can also contact the technical support of the site and his request will be sent to the corresponding e-mail specified in .env.
 ---
 ## Technologies
- - Backend : Django (Python 3.11)
+ - Backend : Django (Python 3.11.9)
  - Frontend : React (Node.js 18)
  - Database : PostgreSQL
  - Authentication : JWT (JSON Web Tokens) using rest_framework_simplejwt
@@ -22,8 +22,12 @@ This is a web application developed using Django (backend) and React (frontend) 
 ---
 ## Project Structure
 ```
-ProjectSite/
+ProductCalculator/
 ├── django/                 # Backend (Django)
+│   ├── api/                # Django app folder
+│   ├── CalculationWebSite/ # Django project folder
+│   ├── media/              # Folder for media files (photos for web-application)
+│   ├── module/             # Folder for calculating modules (way to module input in db)
 │   ├── manage.py           # Django management script
 │   ├── requirements.txt    # Python dependencies
 │   ├── Dockerfile          # Dockerfile for the backend
