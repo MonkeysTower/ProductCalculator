@@ -30,7 +30,7 @@ services:
     ports:
       - 8000
     volumes:
-      - django_static_volume:/app/static
+      - django_static_volume:/app/staticfiles
       - django_media_volume:/app/media
       - django_module_volume:/app/modules
     depends_on:
@@ -60,8 +60,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - django_static_volume:/home/src/app/static
-      - django_media_volume:/home/src/app/media 
+      - django_static_volume:/app/staticfiles
+      - django_media_volume:/app/media
 
 volumes:
   db-data:

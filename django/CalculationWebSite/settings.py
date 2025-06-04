@@ -23,9 +23,6 @@ config = Config('.env')
 SECRET_KEY = config("SECRET_KEY", cast=str)
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -163,11 +160,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
+    config('INTERNAL_IP_FRONTEND', cast=str),
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
+    config('REACT_APP_API_MEDIA', cast=str),
 ]
+
+ALLOWED_HOSTS = ['*']
 CORS_ALLOW_CREDENTIALS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

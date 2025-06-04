@@ -83,19 +83,27 @@ docker-compose up --build
 ```https
 http://localhost:8000/api/
 ```
+OR
+```https
+http://{YOUR_INTERNAL_IP}:8000/api/
+```
 
  - Django admin panel
 ```https
 http://localhost:8000/admin/
 ```
+OR
+```https
+http://{YOUR_INTERNAL_IP}/admin/
+```
 
  - For create a superuser to access the admin panel:
-```
+```bash
 docker exec -it <backend_container_id> python manage.py createsuperuser
 ```
 
  - For create a initial working sample data use:
-```
+```bash
 docker exec -it <backend_container_id> python manage.py create_sample_data
 ```
 
