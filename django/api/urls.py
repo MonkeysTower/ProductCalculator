@@ -12,6 +12,8 @@ from .views import (
     StockListView,
     CalculateCostView,
     LatestArticleView,
+    AddCommentView,
+    ToggleLikeView,
     register_user,
     support_user,
     get_csrf_token,
@@ -33,4 +35,6 @@ urlpatterns = [
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("logout/", user_logout, name="user_logout"),
     path("latest-article/", LatestArticleView.as_view(), name="latest_article"),
+    path("add-comment/<int:article_id>/", AddCommentView.as_view(), name="add_comment"),
+    path("toggle-like/<int:article_id>/", ToggleLikeView.as_view(), name="toggle_like"),
 ]

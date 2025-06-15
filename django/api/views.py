@@ -21,6 +21,8 @@ from .models import (
     Stock,
     Module,
     Article,
+    Comment,
+    Like
 )
 from .serializers import (
     CategorySerializer,
@@ -29,6 +31,7 @@ from .serializers import (
     ProductFieldSerializer,
     StockSerializer,
     ArticleSerializer,
+    CommentSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -264,19 +267,53 @@ def user_logout(request):
 
 class LatestArticleView(APIView):
     def get(self, request):
-        cached_article = cache.get("latest_article")
-        if not cached_article:
-            article = (
-                Article.objects.filter(is_published=True)
-                .order_by("-created_at")
-                .first()
+        article = (
+            Article.objects.filter(is_published=True)
+            .order_by("-created_at")
+            .first()
+        )
+        if not article:
+            return Response({"detail": "Статья не найдена"}, status=404)
+        serializer = ArticleSerializer(article, context={"request": request})
+        return Response(serializer.data)
+
+class AddCommentView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, article_id):
+        try:
+            article = Article.objects.get(id=article_id)
+            text = request.data.get("text")
+            if not text:
+                return Response({"error": "Text is required"}, status=400)
+
+            # Получаем имя и фамилию из профиля пользователя
+            full_name = f"{request.user.first_name} {request.user.last_name}"
+
+            comment = Comment.objects.create(
+                article=article,
+                user=request.user,
+                full_name=full_name,
+                text=text
             )
-            if article:
-                serializer = ArticleSerializer(article)
-                cached_article = serializer.data
-                cache.set(
-                    "latest_article", cached_article, timeout=3600
-                )  # Кэширование на 1 час
-            else:
-                return Response({"detail": "Статья не найдена"}, status=404)
-        return Response(cached_article)
+            serializer = CommentSerializer(comment)
+            return Response(serializer.data, status=201)
+        except Article.DoesNotExist:
+            return Response({"error": "Article not found"}, status=404)
+
+
+class ToggleLikeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, article_id):
+        try:
+            article = Article.objects.get(id=article_id)
+            like, created = Like.objects.get_or_create(article=article, user=request.user)
+            if not created:
+                like.delete()
+                return Response({"message": "Like removed"}, status=200)
+            return Response({"message": "Like added"}, status=201)
+        except Article.DoesNotExist:
+            return Response({"error": "Article not found"}, status=404)

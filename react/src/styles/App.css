@@ -179,28 +179,28 @@ main .advertisment-picture {
 }
 
 .image-container {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    width: 20%;
-    margin: 10px;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    overflow: hidden;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  width: 20%;
+  margin: 10px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .image {
-    display: block;
-    min-width: 98%;
-    min-height: 98%;
-    object-fit: cover;
-    border-radius: 5px;
+  display: block;
+  min-width: 98%;
+  min-height: 98%;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .image-container:hover {
@@ -256,11 +256,11 @@ main .advertisment-picture {
 }
 
 .sector-window.characreristics .form input {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .sector-window.characreristics .form select {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 footer {
@@ -415,38 +415,103 @@ footer button:hover {
 }
 
 .article-section {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .article-section h3 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-    color: #333;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .article-section p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
 }
 
 .article-section small {
-    display: block;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #888;
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #888;
 }
 
 .article-image {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.article-section button {
+  background-color: #f9f9f9;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 5px 20px;
+}
+
+.article-section button:hover {
+  background-color: #bc002254;
+}
+
+.article-section .addcomment-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-section textarea {
+  width: 100%;
+  height: 100px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  margin: 10px 0px 5px 5px;
+}
+
+.article-section .comment-addbutton {
+  background-color: #BC0022;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 5px 0px 20px 5px;
+}
+
+.article-section .comment-addbutton:hover {
+  background-color: #700015;
+}
+
+.article-section .comment-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #c2c2c2;
+  color: black;
+  border-radius: 8px;
+}
+
+.article-section .comment-item strong {
+  font-size: 1.25rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.article-section .comment-item small {
+  font-size: 0.6rem;
+  color: #292929;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.article-section .comment-item p {
+  font-size: 1rem;
+  margin-left: 0px;
 }
 
 @media (max-width: 480px) {
@@ -459,11 +524,11 @@ footer button:hover {
   }
 
   .header {
-      padding: 0px 10px;
-      height: 60px;
+    padding: 0px 10px;
+    height: 60px;
   }
   .image-container {
-        width: 45%;
+    width: 45%;
   }
   main {
     overflow-x: hidden;
@@ -543,7 +608,7 @@ footer button:hover {
   }
 
   .main .storage-bar .place-for-items {
-      height: 300px;
+    height: 300px;
   }
 
   .login-modal {
@@ -566,10 +631,10 @@ footer button:hover {
     font-size: medium;
   }
   footer {
-      flex-direction: column;
-      height: auto;
-      padding: 10px;
-  }
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+}
   footer button {
     color: rgb(71, 5, 253);
   }
@@ -595,8 +660,8 @@ footer button:hover {
   }
 
   main {
-      flex-direction: column;
-      align-items: stretch;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .main-page, .calculation-page, .side-bars {

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -85,7 +86,6 @@ class Article(models.Model):
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
 
     def get_image(self):
-        # Возвращаем изображение: сначала проверяем локальное, затем URL, иначе None
         if self.image_file:
             return self.image_file.url
         elif self.image_url:
@@ -94,3 +94,23 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(Article, related_name="comments", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=255)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.full_name} on {self.article.title}"
+
+
+class Like(models.Model):
+    article = models.ForeignKey(Article, related_name="likes", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('article', 'user')
