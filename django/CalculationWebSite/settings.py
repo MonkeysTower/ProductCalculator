@@ -101,18 +101,30 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
+        'info_file': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': 'info.log',
+            'formatter': 'standard',
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'error.log',
+            'formatter': 'standard',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file'],
+        '': {  # Root logger, applies to all loggers
+            'handlers': ['info_file', 'error_file'],
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django': {
+            'handlers': ['info_file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     },
 }
 
