@@ -21,6 +21,8 @@ from .models import (
     Stock,
     Module,
     Article,
+    Comment,
+    Like
 )
 from .serializers import (
     CategorySerializer,
@@ -29,6 +31,7 @@ from .serializers import (
     ProductFieldSerializer,
     StockSerializer,
     ArticleSerializer,
+    CommentSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -148,16 +151,6 @@ def register_user(request):
             phone = body.get("phone")
             email = body.get("email")
 
-            # Проверяем, что все обязательные поля переданы
-            if not all([company_name, inn, region, phone, email]):
-                return JsonResponse(
-                    {
-                        "success": False,
-                        "message": "Необходимо заполнить все обязательные поля.",
-                    },
-                    status=400,
-                )
-
             # Формируем сообщение для администратора
             message = (
                 f"Данные указанные при регистрации:\n\n"
@@ -202,6 +195,59 @@ def register_user(request):
     )
 
 
+def support_user(request):
+    if request.method == "POST":
+        try:
+            # Получаем данные из тела запроса в формате JSON
+            body = json.loads(request.body)
+            username = body.get("username")
+            contact_info= body.get("contact_info")
+            subject = body.get("subject")
+            user_message = body.get("message")
+
+            # Формируем сообщение для администратора
+            message = (
+                f"Запрос в тех.поддержку:\n\n"
+                f"Имя: {username}\n"
+                f"Контактная информация: {contact_info}\n\n"
+                f"Тема сообщения: {subject}\n"
+                f"Содержание сообщения: {user_message}\n"
+            )
+
+            # Отправляем письмо администратору
+            try:
+                send_mail(
+                    "СЛУЧИЛАСЬ БЕДА!",
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.SUPPORT_EMAIL],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                return JsonResponse(
+                    {"success": False, "message": f"Ошибка отправки письма: {str(e)}"},
+                    status=500,
+                )
+
+            return JsonResponse(
+                {"success": True, "message": "Запрос успешно отправлен."}
+            )
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"success": False, "message": "Неверный формат данных. Ожидался JSON."},
+                status=400,
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"success": False, "message": f"Ошибка сервера: {str(e)}"}, status=500
+            )
+
+    return JsonResponse(
+        {"success": False, "message": "Метод не поддерживается."}, status=405
+    )
+
+
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({"csrfToken": token})
@@ -221,19 +267,53 @@ def user_logout(request):
 
 class LatestArticleView(APIView):
     def get(self, request):
-        cached_article = cache.get("latest_article")
-        if not cached_article:
-            article = (
-                Article.objects.filter(is_published=True)
-                .order_by("-created_at")
-                .first()
+        article = (
+            Article.objects.filter(is_published=True)
+            .order_by("-created_at")
+            .first()
+        )
+        if not article:
+            return Response({"detail": "Статья не найдена"}, status=404)
+        serializer = ArticleSerializer(article, context={"request": request})
+        return Response(serializer.data)
+
+class AddCommentView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, article_id):
+        try:
+            article = Article.objects.get(id=article_id)
+            text = request.data.get("text")
+            if not text:
+                return Response({"error": "Text is required"}, status=400)
+
+            # Получаем имя и фамилию из профиля пользователя
+            full_name = f"{request.user.first_name} {request.user.last_name}"
+
+            comment = Comment.objects.create(
+                article=article,
+                user=request.user,
+                full_name=full_name,
+                text=text
             )
-            if article:
-                serializer = ArticleSerializer(article)
-                cached_article = serializer.data
-                cache.set(
-                    "latest_article", cached_article, timeout=3600
-                )  # Кэширование на 1 час
-            else:
-                return Response({"detail": "Статья не найдена"}, status=404)
-        return Response(cached_article)
+            serializer = CommentSerializer(comment)
+            return Response(serializer.data, status=201)
+        except Article.DoesNotExist:
+            return Response({"error": "Article not found"}, status=404)
+
+
+class ToggleLikeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, article_id):
+        try:
+            article = Article.objects.get(id=article_id)
+            like, created = Like.objects.get_or_create(article=article, user=request.user)
+            if not created:
+                like.delete()
+                return Response({"message": "Like removed"}, status=200)
+            return Response({"message": "Like added"}, status=201)
+        except Article.DoesNotExist:
+            return Response({"error": "Article not found"}, status=404)

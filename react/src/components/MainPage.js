@@ -16,7 +16,7 @@ const MainPage = ({ isLoggedIn }) => {
           )}
         </div>
         <div className="sector-window">
-          <ArticleSection />
+          <ArticleSection isLoggedIn={isLoggedIn} />
         </div>
       </div>
       <SideBarAdvert />

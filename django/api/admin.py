@@ -6,7 +6,9 @@ from .models import (
     ProductField,
     Stock,
     Module,
-    Article
+    Article,
+    Comment,
+    Like
     )
 
 admin.site.register(Category)
@@ -15,7 +17,8 @@ admin.site.register(Series)
 admin.site.register(ProductField)
 admin.site.register(Stock)
 admin.site.register(Module)
-
+admin.site.register(Comment)
+admin.site.register(Like)
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):

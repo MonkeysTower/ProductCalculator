@@ -36,7 +36,7 @@ def create_sample_data():
 
     # Создание категорий
     neutral = Category.objects.create(name="Нейтральное")
-    thermal = Category.objects.create(name="Непловое")
+    thermal = Category.objects.create(name="Тепловое")
 
     # Создание типов
     umbrella = Type.objects.create(category=neutral, name="Зонты")

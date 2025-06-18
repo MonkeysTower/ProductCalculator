@@ -1,20 +1,45 @@
 import React, { useState } from "react";
+import { getCookie } from "../utils/cookieUtils";
 
-const SupportModal = ({ onClose, onSubmit }) => {
+const SupportModal = ({ onClose }) => {
     const [username, setUsername] = useState("");
     const [contactInfo, setContactInfo] = useState("");
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-    const handleSubmit = () => {
+    const handleSubmit = async (e) => {
         if (!username || !contactInfo || !subject || !message) {
             alert("Пожалуйста, заполните все поля!");
             return;
         }
-        else {
-          onSubmit({ username, contactInfo, subject, message }); // Передаём данные в родительский компонент
-          onClose(); // Закрываем модальное окно
-        }
+        e.preventDefault();
+                try {
+                    const response = await fetch(`${API_BASE_URL}/support/`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          "X-CSRFToken":  getCookie("csrftoken")
+                        },
+                        body: JSON.stringify({
+                            username,
+                            contact_info: contactInfo,
+                            subject,
+                            message,
+                        }),
+                        credentials: "include",
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        alert(data.message || "Ваши данные отправленны в техподдержку. С вами скоро свяжутся");
+                        onClose();
+                    } else {
+                        alert(data.message || "Ошибка отправки.");
+                    }
+                } catch (error) {
+                    console.error("Ошибка регистрации:", error);
+                    alert("Не удалось отправить сообщение. Попробуйте позже.");
+                }
     };
 
     return (
@@ -57,14 +82,12 @@ const SupportModal = ({ onClose, onSubmit }) => {
                         placeholder="Опишите вашу проблему"
                         required
                     /></label>
-                    <div className="modal-actions">
                       <button className="main-btn" onClick={handleSubmit}>
                         Отправить заявку
                       </button>
                       <button className="additional-btn" onClick={onClose}>
                         Закрыть форму
                       </button>
-                    </div>
                 </form>
             </div>
         </div>

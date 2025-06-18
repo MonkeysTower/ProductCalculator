@@ -30,7 +30,7 @@ services:
     ports:
       - 8000
     volumes:
-      - django_static_volume:/app/static
+      - django_static_volume:/app/staticfiles
       - django_media_volume:/app/media
       - django_module_volume:/app/modules
     depends_on:
@@ -38,30 +38,19 @@ services:
     networks:
       - myNetwork
 
-  frontend:
-    build: 
-      context: .
-      dockerfile: ./react/Dockerfile
-    container_name: react
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
-    networks:
-      - myNetwork
-    
   nginx:
-    build: ./nginx
-    container_name: nginx
-    networks:
-      - myNetwork
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
     ports:
-      - 8000:80
+      - "80:80"
     depends_on:
       - backend
     volumes:
-      - django_static_volume:/home/src/app/static
-      - django_media_volume:/home/src/app/media 
+      - django_static_volume:/app/staticfiles
+      - django_media_volume:/app/media
+    networks:
+      - myNetwork
 
 volumes:
   db-data:

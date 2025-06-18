@@ -23,9 +23,6 @@ config = Config('.env')
 SECRET_KEY = config("SECRET_KEY", cast=str)
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -149,7 +146,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'django-static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = 'media/'
@@ -164,10 +161,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://0.0.0.0",
 ]
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://0.0.0.0",
 ]
+
+ALLOWED_HOSTS = ['*']
 CORS_ALLOW_CREDENTIALS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -179,3 +179,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', cast=str)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', cast=str)
 SERVER_EMAIL = config('SERVER_EMAIL', cast=str)
 EMAIL_ADMIN = config('EMAIL_ADMIN', cast=str)
+SUPPORT_EMAIL = config('SUPPORT_EMAIL', cast=str)
