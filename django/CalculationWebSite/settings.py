@@ -105,17 +105,15 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': 'info.log',
-            'formatter': 'standard',
         },
         'error_file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': 'error.log',
-            'formatter': 'standard',
         },
     },
     'loggers': {
-        '': {  # Root logger, applies to all loggers
+        'root': {  # Root logger, applies to all loggers
             'handlers': ['info_file', 'error_file'],
             'level': 'DEBUG',
             'propagate': True,

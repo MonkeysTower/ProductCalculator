@@ -46,7 +46,7 @@ def log_request_and_user_info(request, error_message=None):
         username = "Anonymous"
 
     try:
-        body = json.loads(request.body) if request.body else {}
+        body = json.loads(request.data) if request.data else {}
     except json.JSONDecodeError:
         body = {"error": "Invalid JSON in request body"}
 
