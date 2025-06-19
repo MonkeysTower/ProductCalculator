@@ -1,3 +1,7 @@
+import sys
+import os
+import shutil
+import tempfile
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
@@ -19,10 +23,26 @@ class APITests(TestCase):
         self.series = Series.objects.create(
             name="Test Series", type=self.type, image=""
         )
+
+        # Создаем временный файл для модуля расчета
+        self.temp_module_dir = tempfile.mkdtemp()
+        self.module_path = os.path.join(self.temp_module_dir, "calculate_test.py")
+        with open(self.module_path, "w") as f:
+            f.write("""
+def calculate_cost(data):
+    if data == "крашен./некраш.":
+        return 1000
+    return 0
+""")
+
+        sys.path.append(self.temp_module_dir)
+
+        # Создаем запись в базе данных для модуля
         self.module = Module.objects.create(
             series=self.series,
-            module_path="modules.calculate_zvn_01"
+            module_path=f"calculate_test"
         )
+
         self.series.fields.create(
             field_name="Test Field",
             field_type="number",
@@ -30,12 +50,23 @@ class APITests(TestCase):
             custom_true="Yes",
             custom_false="No"
         )
-        self.client = APIClient()
+
         self.user = User.objects.create_user(
             username="testuser", password="testpassword"
         )
         refresh = RefreshToken.for_user(self.user)
         self.token = str(refresh.access_token)
+
+    def tearDown(self):
+        # Remove the temporary directory from sys.path
+        if self.temp_module_dir in sys.path:
+            sys.path.remove(self.temp_module_dir)
+
+        # Delete the temporary files and directory
+        if os.path.exists(self.module_path):
+            os.remove(self.module_path)
+        if os.path.exists(self.temp_module_dir):
+            shutil.rmtree(self.temp_module_dir)
 
     def test_category_list(self):
         """Тестирование получения списка категорий."""
