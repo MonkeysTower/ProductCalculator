@@ -54,6 +54,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'api.throttling.IPBasedThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day',
+    },
 }
 
 ROOT_URLCONF = 'CalculationWebSite.urls'
@@ -101,18 +108,28 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
+        'info_file': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': 'info.log',
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'error.log',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file'],
+        'root': {  # Root logger, applies to all loggers
+            'handlers': ['info_file', 'error_file'],
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django': {
+            'handlers': ['info_file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     },
 }
 
@@ -160,12 +177,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://0.0.0.0",
-    config('INTERNAL_IP_FRONTEND', cast=str),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
-    config('REACT_APP_API_MEDIA', cast=str),
+    "http://0.0.0.0",
 ]
 
 ALLOWED_HOSTS = ['*']

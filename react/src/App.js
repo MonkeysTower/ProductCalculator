@@ -22,7 +22,7 @@ const App = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegistrationModal, setShowRegistrationModal] = useState(false);
     const [showSupportModal, setShowSupportModal] = useState(false);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BASE_URL = '/api';
 
     const handleLogin = () => {
         setIsLoggedIn(true);

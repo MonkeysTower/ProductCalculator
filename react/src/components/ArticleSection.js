@@ -7,8 +7,7 @@ const ArticleSection = ({ isLoggedIn }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
     const [showComments, setShowComments] = useState(false);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const API_MEDIA_URL = process.env.REACT_APP_API_MEDIA;
+    const API_BASE_URL = '/api';
     
     const formatDate = (dateString) => {
         const options = {
@@ -34,7 +33,7 @@ const ArticleSection = ({ isLoggedIn }) => {
                 }
 
                 // Если fetchWithAuth вернул null или токена нет, используем обычный fetch
-                if (!response) {
+                if (!response || !accessToken) {
                     response = await fetch(`${API_BASE_URL}/latest-article/`);
                 }
 
@@ -47,7 +46,7 @@ const ArticleSection = ({ isLoggedIn }) => {
 
                 // Обработка изображения
                 if (data.image && !isAbsoluteUrl(data.image)) {
-                    data.image = `${API_MEDIA_URL}${data.image}`;
+                    data.image = `${data.image}`;
                 }
 
                 // Установка состояний
@@ -61,7 +60,7 @@ const ArticleSection = ({ isLoggedIn }) => {
         };
 
         loadArticle();
-    }, [API_BASE_URL, API_MEDIA_URL]);
+    }, [API_BASE_URL]);
 
     const isAbsoluteUrl = (url) => {
         return /^https?:\/\//i.test(url);
@@ -121,8 +120,7 @@ const ArticleSection = ({ isLoggedIn }) => {
                 throw new Error(`Ошибка HTTP: ${response.status}`);
             }
 
-            const data = await response.json();
-            if (data.message === "Like added") {
+            if (response.status === 201) {
                 setIsLiked(true);
                 setLikesCount((prev) => prev + 1);
             } else {

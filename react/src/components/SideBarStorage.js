@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const SideBarStorage = () => {
     const [stock, setStock] = useState([]);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BASE_URL = '/api';
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/stock/`)

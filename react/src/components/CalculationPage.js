@@ -19,9 +19,8 @@ const CalculationPage = () => {
     const [formData, setFormData] = useState({});
     const [calculationResult, setCalculationResult] = useState(null)
 
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const API_MEDIA_URL = process.env.REACT_APP_API_MEDIA;
-    const placeholderImage = `${API_MEDIA_URL}/media/placeholder.png`;
+    const API_BASE_URL = '/api';
+    const placeholderImage = `/media/placeholder.png`;
 
     // Загрузка категорий
     useEffect(() => {
@@ -186,7 +185,7 @@ const CalculationPage = () => {
                                     {categories.map((category) => (
                                         <Card
                                             key={category.id}
-                                            image={category.image ? `${API_MEDIA_URL}${category.image}` : placeholderImage}
+                                            image={category.image ? `${category.image}` : placeholderImage}
                                             title={category.name}
                                             onClick={() => selectCategory(category.id)}
                                             isSelected={selectedCategory === category.id}
@@ -205,7 +204,7 @@ const CalculationPage = () => {
                                         {types.map((type) => (
                                             <Card
                                                 key={type.id}
-                                                image={type.image ? `${API_MEDIA_URL}${type.image}` : placeholderImage}
+                                                image={type.image ? `${type.image}` : placeholderImage}
                                                 title={type.name}
                                                 onClick={() => selectType(type.id)}
                                                 isSelected={selectedType === type.id}
@@ -225,7 +224,7 @@ const CalculationPage = () => {
                                         {series.map((serie) => (
                                             <Card
                                                 key={serie.id}
-                                                image={serie.image ? `${API_MEDIA_URL}${serie.image}` : placeholderImage}
+                                                image={serie.image ? `${serie.image}` : placeholderImage}
                                                 title={serie.name}
                                                 onClick={() => selectSeries(serie.id)}
                                                 isSelected={selectedSeries === serie.id}

@@ -34,7 +34,30 @@ from .serializers import (
     CommentSerializer
 )
 
+
 logger = logging.getLogger(__name__)
+
+
+def log_request_and_user_info(request, error_message=None):
+    """Вспомогательная функция для логгирования данных запроса и пользователя."""
+    try:
+        username = request.user.username if request.user.is_authenticated else "Anonymous"
+    except AttributeError:
+        username = "Anonymous"
+
+    try:
+        body = json.loads(request.data) if request.data else {}
+    except json.JSONDecodeError:
+        body = {"error": "Invalid JSON in request body"}
+
+    endpoint = request.path
+
+    if error_message:
+        logger.error(
+            f"Endpoint: {endpoint}, User: {username}, Request Body: {body}, Error: {error_message}"
+            )
+    else:
+        logger.info(f"Endpoint: {endpoint}, User: {username}, Request Body: {body}")
 
 
 class CategoryListView(APIView):
@@ -45,10 +68,13 @@ class CategoryListView(APIView):
                 categories = Category.objects.all()
                 serializer = CategorySerializer(categories, many=True)
                 cache.set("categories", serializer.data, timeout=1200)
-                logger.info("Categories fetched successfully.")
+                logger.info(
+                    f"Endpoint: {request.path}, User: {request.user.username} "
+                    "- Categories fetched successfully and cached."
+                )
                 return Response(serializer.data)
             except Exception as e:
-                logger.error(f"Error fetching categories: {str(e)}")
+                log_request_and_user_info(request, str(e))
                 return Response({"error": "Internal server error"}, status=500)
         return Response(cached_categories)
 
@@ -59,10 +85,22 @@ class TypeListView(APIView):
         cache_key = f"types_{category_id}"
         cached_types = cache.get(cache_key)
         if not cached_types:
-            types = Type.objects.filter(category_id=category_id)
-            serializer = TypeSerializer(types, many=True)
-            cache.set(cache_key, serializer.data, timeout=300)
-            return Response(serializer.data)
+            try:
+                types = Type.objects.filter(category_id=category_id)
+                serializer = TypeSerializer(types, many=True)
+                cache.set(cache_key, serializer.data, timeout=300)
+                logger.info(
+                    f"Endpoint: {request.path}, User: {request.user.username} "
+                    f"- Types for category_id={category_id} fetched and cached."
+                )
+                return Response(serializer.data)
+            except Exception as e:
+                log_request_and_user_info(request, str(e))
+                return Response({"error": "Internal server error"}, status=500)
+        logger.info(
+            f"Endpoint: {request.path}, User: {request.user.username} "
+            f"- Types for category_id={category_id} retrieved from cache."
+        )
         return Response(cached_types)
 
 
@@ -72,10 +110,22 @@ class SeriesListView(APIView):
         cache_key = f"series_{type_id}"
         cached_series = cache.get(cache_key)
         if not cached_series:
-            series = Series.objects.filter(type_id=type_id)
-            serializer = SeriesSerializer(series, many=True)
-            cache.set(cache_key, serializer.data, timeout=300)
-            return Response(serializer.data)
+            try:
+                series = Series.objects.filter(type_id=type_id)
+                serializer = SeriesSerializer(series, many=True)
+                cache.set(cache_key, serializer.data, timeout=300)
+                logger.info(
+                    f"Endpoint: {request.path}, User: {request.user.username} "
+                    f"- Series for type_id={type_id} fetched and cached."
+                )
+                return Response(serializer.data)
+            except Exception as e:
+                log_request_and_user_info(request, str(e))
+                return Response({"error": "Internal server error"}, status=500)
+        logger.info(
+            f"Endpoint: {request.path}, User: {request.user.username} "
+            f"- Series for type_id={type_id} retrieved from cache."
+        )
         return Response(cached_series)
 
 
@@ -84,6 +134,10 @@ class ProductFieldListView(APIView):
         series_id = request.GET.get("series_id")
         fields = ProductField.objects.filter(series_id=series_id)
         serializer = ProductFieldSerializer(fields, many=True)
+        logger.info(
+            f"Endpoint: {request.path}, User: {request.user.username} "
+            f"- All fields for series_id={series_id} fetched"
+        )
         return Response(serializer.data)
 
 
@@ -91,6 +145,10 @@ class StockListView(APIView):
     def get(self, request):
         stock = Stock.objects.all()
         serializer = StockSerializer(stock, many=True)
+        logger.info(
+            f"Endpoint: {request.path}, User: {request.user.username} "
+            "- All stock items fetched"
+        )
         return Response(serializer.data)
 
 
@@ -102,16 +160,23 @@ class CalculateCostView(APIView):
         series_id = request.data.get("series_id")
         data = request.data.get("data")
         if not series_id or not data:
-            return Response(
-                {"error": "Both 'series_id' and 'data' are required."}, status=400
-            )
+            error_message = "Both 'series_id' and 'data' are required."
+            log_request_and_user_info(request, error_message)
+            return Response({"error": error_message}, status=400)
+
         try:
             module = Module.objects.get(series_id=series_id)
             module_path = module.module_path
             calculate_module = importlib.import_module(module_path)
             cost = calculate_module.calculate_cost(data)
+            logger.info(
+                f"Endpoint: {request.path} - User: {request.user.username}, "
+                f"Request: {request.data}, Response: {{'cost': {cost}}}"
+            )
             return Response({"cost": cost})
         except Exception as e:
+            error_message = str(e)
+            log_request_and_user_info(request, error_message)
             return Response({"error": str(e)}, status=400)
 
 
@@ -143,15 +208,12 @@ def user_login(request):
 def register_user(request):
     if request.method == "POST":
         try:
-            # Получаем данные из тела запроса в формате JSON
             body = json.loads(request.body)
             company_name = body.get("company_name")
             inn = body.get("inn")
             region = body.get("region")
             phone = body.get("phone")
             email = body.get("email")
-
-            # Формируем сообщение для администратора
             message = (
                 f"Данные указанные при регистрации:\n\n"
                 f"Компания: {company_name}\n"
@@ -160,8 +222,6 @@ def register_user(request):
                 f"Телефон: {phone}\n"
                 f"Email: {email}"
             )
-
-            # Отправляем письмо администратору
             try:
                 send_mail(
                     "Запрос на регистрацию",
@@ -171,25 +231,33 @@ def register_user(request):
                     fail_silently=False,
                 )
             except Exception as e:
+                error_message = f"Ошибка отправки письма: {str(e)}"
+                log_request_and_user_info(request, error_message)
                 return JsonResponse(
-                    {"success": False, "message": f"Ошибка отправки письма: {str(e)}"},
-                    status=500,
+                    {"success": False, "message": error_message}, status=500
                 )
-
+            logger.info(
+                f"Endpoint: {request.path} - Registration successful "
+                f"for company='{company_name}'."
+            )
             return JsonResponse(
                 {"success": True, "message": "Регистрация прошла успешно."}
             )
-
         except json.JSONDecodeError:
+            error_message = "Invalid JSON format in registration request."
+            log_request_and_user_info(request, error_message)
             return JsonResponse(
                 {"success": False, "message": "Неверный формат данных. Ожидался JSON."},
                 status=400,
             )
         except Exception as e:
+            error_message = f"Server error during registration: {str(e)}"
+            log_request_and_user_info(request, error_message)
             return JsonResponse(
-                {"success": False, "message": f"Ошибка сервера: {str(e)}"}, status=500
+                {"success": False, "message": error_message}, status=500
             )
-
+    error_message = "Unsupported method used for registration."
+    log_request_and_user_info(request, error_message)
     return JsonResponse(
         {"success": False, "message": "Метод не поддерживается."}, status=405
     )
@@ -286,7 +354,7 @@ class AddCommentView(APIView):
             article = Article.objects.get(id=article_id)
             text = request.data.get("text")
             if not text:
-                return Response({"error": "Text is required"}, status=400)
+                return Response({"error": "Текст обязателен"}, status=400)
 
             # Получаем имя и фамилию из профиля пользователя
             full_name = f"{request.user.first_name} {request.user.last_name}"
@@ -300,7 +368,7 @@ class AddCommentView(APIView):
             serializer = CommentSerializer(comment)
             return Response(serializer.data, status=201)
         except Article.DoesNotExist:
-            return Response({"error": "Article not found"}, status=404)
+            return Response({"error": "Статья не найдена"}, status=404)
 
 
 class ToggleLikeView(APIView):
@@ -313,7 +381,7 @@ class ToggleLikeView(APIView):
             like, created = Like.objects.get_or_create(article=article, user=request.user)
             if not created:
                 like.delete()
-                return Response({"message": "Like removed"}, status=200)
-            return Response({"message": "Like added"}, status=201)
+                return Response({"message": "Лайк удален"}, status=200)
+            return Response({"message": "Лайк добавлен"}, status=201)
         except Article.DoesNotExist:
-            return Response({"error": "Article not found"}, status=404)
+            return Response({"error": "Статья не найдена"}, status=404)
