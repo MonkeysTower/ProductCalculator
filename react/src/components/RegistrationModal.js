@@ -7,7 +7,7 @@ const RegistrationModal = ({ onClose }) => {
     const [region, setRegion] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BASE_URL = '/api';
 
     const handleSubmit = async (e) => {
         if (!companyName || !inn || !region || !phone || !email) {

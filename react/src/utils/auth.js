@@ -5,7 +5,7 @@ export const refreshAccessToken = async () => {
     if (!refreshToken) return null;
 
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/token/refresh/`, {
+        const response = await fetch(`api/token/refresh/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
