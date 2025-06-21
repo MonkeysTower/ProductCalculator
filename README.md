@@ -35,7 +35,6 @@ ProductCalculator/
 ├── react/                  # Frontend (React)
 │   ├── src/                # React source code
 │   ├── package.json        # Node.js dependencies
-│   ├── Dockerfile          # Dockerfile for the frontend
 │   └── ...
 ├── nginx/                  # Nginx configuration
 │   ├── nginx.conf          # Main configuration file
@@ -74,27 +73,27 @@ docker-compose up --build
 ```
 
 
-#### After successful startup, the application will be available at: `http://localhost:3000`
+#### After successful startup, the application will be available at: `http://localhost:80`
 
 ---
 ## Working with the Project
 ### API
  - API is accessible at:
 ```https
-http://localhost:8000/api/
+http://localhost:80/api/
 ```
 OR
 ```https
-http://{YOUR_INTERNAL_IP}:8000/api/
+http://{YOUR_INTERNAL_IP}:80/api/
 ```
 
  - Django admin panel
 ```https
-http://localhost:8000/admin/
+http://localhost:80/admin/
 ```
 OR
 ```https
-http://{YOUR_INTERNAL_IP}:8000/admin/
+http://{YOUR_INTERNAL_IP}:80/admin/
 ```
 
  - For create a superuser to access the admin panel:
